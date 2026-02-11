@@ -1,17 +1,17 @@
 package com.banco.usuario;
 
 import com.banco.usuario.model.Usuario;
-import com.banco.usuario.repository.UsuarioRepository;
+import com.banco.usuario.service.UsuarioService;
+import com.banco.usuario.exception.UsuarioNaoEncontradoException;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
 
-        UsuarioRepository repository = new UsuarioRepository();
+        UsuarioService service = new UsuarioService();
         Scanner scanner = new Scanner(System.in);
 
         int opcao;
@@ -27,90 +27,83 @@ public class Main {
             System.out.print("Escolha uma opção: ");
 
             opcao = scanner.nextInt();
-            scanner.nextLine(); // limpar buffer
+            scanner.nextLine();
 
-            switch (opcao) {
+            try {
 
-                case 1:
-                    System.out.println("\n--- Cadastro de Usuário ---");
-                    System.out.print("Nome: ");
-                    String nome = scanner.nextLine();
+                switch (opcao) {
 
-                    System.out.print("Email: ");
-                    String email = scanner.nextLine();
+                    case 1:
+                        System.out.println("\n--- Cadastro de Usuário ---");
+                        System.out.print("Nome: ");
+                        String nome = scanner.nextLine();
 
-                    repository.salvar(new Usuario(null, nome, email));
-                    System.out.println("✅ Usuário cadastrado com sucesso!");
-                    break;
+                        System.out.print("Email: ");
+                        String email = scanner.nextLine();
 
-                case 2:
-                    System.out.println("\n--- Lista de Usuários ---");
-                    List<Usuario> lista = repository.listar();
-                    if (lista.isEmpty()) {
-                        System.out.println("⚠ Nenhum usuário cadastrado.");
-                    } else {
-                        lista.forEach(System.out::println);
-                    }
-                    break;
+                        service.criarUsuario(nome, email);
+                        System.out.println("✅ Usuário cadastrado com sucesso!");
+                        break;
 
-                case 3:
-                    System.out.print("\nDigite o ID: ");
-                    Long idBusca = scanner.nextLong();
+                    case 2:
+                        System.out.println("\n--- Lista de Usuários ---");
+                        List<Usuario> lista = service.listarUsuarios();
 
-                    Usuario usuarioEncontrado = repository.buscarPorId(idBusca);
+                        if (lista.isEmpty()) {
+                            System.out.println("⚠ Nenhum usuário cadastrado.");
+                        } else {
+                            lista.forEach(System.out::println);
+                        }
+                        break;
 
-                    if (usuarioEncontrado != null) {
+                    case 3:
+                        System.out.print("\nDigite o ID: ");
+                        Long idBusca = scanner.nextLong();
+
+                        Usuario usuarioEncontrado = service.buscarUsuario(idBusca);
                         System.out.println("✅ Usuário encontrado:");
                         System.out.println(usuarioEncontrado);
-                    } else {
-                        System.out.println("❌ Usuário não encontrado.");
-                    }
-                    break;
+                        break;
 
-                case 4:
-                    System.out.print("\nDigite o ID do usuário para atualizar: ");
-                    Long idAtualizar = scanner.nextLong();
-                    scanner.nextLine();
+                    case 4:
+                        System.out.print("\nDigite o ID do usuário para atualizar: ");
+                        Long idAtualizar = scanner.nextLong();
+                        scanner.nextLine();
 
-                    Usuario usuarioAtualizar = repository.buscarPorId(idAtualizar);
-
-                    if (usuarioAtualizar == null) {
-                        System.out.println("❌ Usuário não existe. Atualização cancelada.");
-                    } else {
                         System.out.print("Novo nome: ");
                         String novoNome = scanner.nextLine();
 
                         System.out.print("Novo email: ");
                         String novoEmail = scanner.nextLine();
 
-                        usuarioAtualizar.setNome(novoNome);
-                        usuarioAtualizar.setEmail(novoEmail);
-
-                        repository.atualizar(usuarioAtualizar);
+                        service.atualizarUsuario(idAtualizar, novoNome, novoEmail);
                         System.out.println("✅ Usuário atualizado com sucesso!");
-                    }
-                    break;
+                        break;
 
-                case 5:
-                    System.out.print("\nDigite o ID do usuário para remover: ");
-                    Long idRemover = scanner.nextLong();
+                    case 5:
+                        System.out.print("\nDigite o ID do usuário para remover: ");
+                        Long idRemover = scanner.nextLong();
 
-                    Usuario usuarioRemover = repository.buscarPorId(idRemover);
+                        service.removerUsuario(idRemover);
+                        System.out.println(" Usuário removido com sucesso!");
+                        break;
 
-                    if (usuarioRemover == null) {
-                        System.out.println("❌ Usuário não existe. Remoção cancelada.");
-                    } else {
-                        repository.remover(idRemover);
-                        System.out.println("🗑 Usuário removido com sucesso!");
-                    }
-                    break;
+                    case 0:
+                        System.out.println("👋 Encerrando sistema...");
+                        break;
 
-                case 0:
-                    System.out.println("👋 Encerrando sistema...");
-                    break;
+                    default:
+                        System.out.println("⚠ Opção inválida!");
+                }
 
-                default:
-                    System.out.println("⚠ Opção inválida!");
+            } catch (UsuarioNaoEncontradoException e) {
+                System.out.println("❌ " + e.getMessage());
+
+            } catch (IllegalArgumentException e) {
+                System.out.println("⚠ Dados inválidos: " + e.getMessage());
+
+            } catch (Exception e) {
+                System.out.println("🚨 Erro inesperado: " + e.getMessage());
             }
 
         } while (opcao != 0);
