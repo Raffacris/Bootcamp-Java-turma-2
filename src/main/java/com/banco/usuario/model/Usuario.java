@@ -1,24 +1,29 @@
 package com.banco.usuario.model;
 
-import java.util.Objects;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "usuario")
 public class Usuario {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String nome;
     private String email;
 
-    
-    protected Usuario() {}
-
-    
-    public Usuario(Long id, String nome, String email) {
-        setId(id);
-        setNome(nome);
-        setEmail(email);
+    protected Usuario() {
+       
     }
 
-    
+    public Usuario(Long id, String nome, String email) {
+        this.id = id;
+        this.nome = nome;
+        this.email = email;
+    }
+
+    // Getters
     public Long getId() {
         return id;
     }
@@ -31,50 +36,25 @@ public class Usuario {
         return email;
     }
 
-    
+    // Setters
     public void setId(Long id) {
-        if (id != null && id <= 0) {
-            throw new IllegalArgumentException("ID deve ser maior que zero.");
-        }
         this.id = id;
     }
 
     public void setNome(String nome) {
-        if (nome == null || nome.trim().isEmpty()) {
-            throw new IllegalArgumentException("Nome não pode ser vazio.");
-        }
-        this.nome = nome.trim();
+        this.nome = nome;
     }
 
     public void setEmail(String email) {
-        if (email == null || !email.contains("@")) {
-            throw new IllegalArgumentException("Email inválido.");
-        }
-        this.email = email.trim().toLowerCase();
+        this.email = email;
     }
 
-    
-
+    // Método auxiliar para atualizar dados
     public void atualizarDados(String nome, String email) {
-        setNome(nome);
-        setEmail(email);
+        this.nome = nome;
+        this.email = email;
     }
 
-   
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Usuario)) return false;
-        Usuario usuario = (Usuario) o;
-        return Objects.equals(id, usuario.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
-    
     @Override
     public String toString() {
         return "Usuario{" +

@@ -1,4 +1,6 @@
+com\banco\usuario\exception\UsuarioNaoEncontradoException.class
+com\banco\usuario\Main.class
+com\banco\usuario\service\UsuarioService.class
 com\banco\usuario\model\Usuario.class
 com\banco\usuario\repository\UsuarioRepository.class
-com\banco\usuario\service\UsuarioService.class
-com\banco\usuario\Main.class
+com\banco\usuario\controller\UsuarioController.class
