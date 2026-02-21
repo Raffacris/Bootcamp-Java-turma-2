@@ -1,0 +1,4 @@
+com\banco\usuario\model\Usuario.class
+com\banco\usuario\repository\UsuarioRepository.class
+com\banco\usuario\Main.class
+com\banco\usuario\service\UsuarioService.class

@@ -1,5 +1,6 @@
 package com.banco.usuario.service;
 
+import com.banco.usuario.exception.UsuarioNaoEncontradoException;
 import com.banco.usuario.model.Usuario;
 import com.banco.usuario.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ public class UsuarioService {
 
     public Usuario buscarUsuario(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado."));
+                .orElseThrow(() -> new UsuarioNaoEncontradoException(id));
     }
 
     public Usuario atualizarUsuario(Long id, String nome, String email) {
@@ -36,6 +37,9 @@ public class UsuarioService {
     }
 
     public void removerUsuario(Long id) {
+        if (!repository.existsById(id)) {
+            throw new UsuarioNaoEncontradoException(id);
+        }
         repository.deleteById(id);
     }
 }
