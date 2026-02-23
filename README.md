@@ -12,7 +12,7 @@ Garantir organização e escalabilidade
 Simular padrão utilizado em consultorias
 
 Preparar estrutura compatível com ambientes empresariais
-
+---
 🏗 Arquitetura Aplicada
 
 A aplicação segue o padrão Layered Architecture, amplamente utilizado em projetos corporativos.
@@ -34,7 +34,7 @@ Injeção de dependência
 Baixo acoplamento
 
 Código orientado à manutenção
-
+---
 🛠 Stack Tecnológica
 
 Java 17
@@ -50,7 +50,7 @@ Maven
 H2 Database
 
 Git
-
+---
 🔄 Evolução Técnica do Projeto
 🔹 Fase 1 – CRUD em Java Puro
 
@@ -80,6 +80,7 @@ Interface JpaRepository
 
 Banco H2 configurado via application.properties
 
+---
 
 📊 Conceitos Corporativos Aplicados
 
@@ -90,6 +91,7 @@ Banco H2 configurado via application.properties
 ✔ Base para implementação de logs e monitoramento
 ✔ Preparação para ambientes com SLA e gestão de incidentes
 
+---
 🧠 Visão de Mercado
 
 Este projeto foi desenvolvido considerando padrões utilizados em empresas de consultoria e ambientes corporativos que utilizam:
