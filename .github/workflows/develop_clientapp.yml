@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy Node.js app to Azure Web App - ClientApp
+name: Build and deploy JAR app to Azure Web App - ClientApp
 
 on:
   push:
@@ -18,16 +18,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Node.js version
-        uses: actions/setup-node@v3
+      - name: Set up Java version
+        uses: actions/setup-java@v4
         with:
-          node-version: '22.x'
+          java-version: '21'
+          distribution: 'microsoft'
+
+      - name: Build with Maven
+        run: mvn clean install
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
-          name: node-app
-          path: .
+          name: java-app
+          path: '${{ github.workspace }}/target/*.jar'
 
   deploy:
     runs-on: ubuntu-latest
@@ -35,25 +39,25 @@ jobs:
     permissions:
       id-token: write #This is required for requesting the JWT
       contents: read #This is required for actions/checkout
-
+  
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
-          name: node-app
+          name: java-app
       
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_CAF5876D3C9F440480C14D655080049C }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_5BCCBE1B8253498EAADEB83169514154 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_91FBFA284A2E4581AE6619DA897C926D }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_1A615158879E4005BE5F0CC69F93BD05 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_79A9F9ECA64F4EE095191A32DE659D15 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_D54D4C8B7EF647A3980BC769E6568720 }}
 
-      - name: 'Deploy to Azure Web App'
+      - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'ClientApp'
           slot-name: 'Production'
-          package: .
+          package: '*.jar'
           
