@@ -59,7 +59,7 @@ jobs:
         with:
           app-name: 'ClientApp'
           slot-name: 'Production'
-
           package: '*.jar'
+
 
 
