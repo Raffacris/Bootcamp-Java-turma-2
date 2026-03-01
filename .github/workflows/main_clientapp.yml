@@ -24,8 +24,8 @@ jobs:
       - name: Build with Maven
         run: mvn clean install
 
-      # Garante que o arquivo JAR tenha o nome exato esperado pelo Azure
-      - name: Rename JAR to app.jar
+      # Renomeia o JAR gerado para 'app.jar' para facilitar o comando de inicialização
+      - name: Rename artifact
         run: mv target/*.jar target/app.jar
 
       - name: Upload artifact for deployment job
@@ -59,5 +59,6 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'ClientApp'
+          slot-name: 'Production'
           package: 'app.jar'
-          
+
