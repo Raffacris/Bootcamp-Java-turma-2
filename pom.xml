@@ -76,6 +76,8 @@
 
     <!-- Build -->
     <build>
+
+        <finalName>app</finalName>
         <plugins>
 
             <!-- Plugin Spring Boot -->
